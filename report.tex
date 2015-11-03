@@ -1,0 +1,157 @@
+\documentclass[a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage{geometry}
+\usepackage{array}
+\usepackage{listings}
+
+\geometry{lmargin=2cm,rmargin=2cm,vmargin=2cm,hmargin=2cm}
+
+\lstset{language=Java,basicstyle=\small}
+
+
+\begin{document}
+
+\title{Sonar fixer}
+\author{Clement Maxime - Piorun Jordan}
+\date{\today}
+\maketitle
+\section{Transformation sonar}
+\par Nous avons commencé par identifier les erreurs majeures levées par sonar que nous voulions corriger. Dans cette première liste sont répertoriées les erreurs qui semblent aisément corrigeable :
+
+
+
+\begin{center}
+	\begin{tabular}{|p{0.45\textwidth}|p{0.45\textwidth}|}
+  	\hline
+	  	\begin{center}
+	  	 Noncompliant
+	  	 \end{center} & 
+	  	 \begin{center}
+	  	 Compliant
+	  	 \end{center} \\
+  	\hline
+	\begin{lstlisting}
+if (myClass.compareTo(arg) == -1) {...}
+  	\end{lstlisting} 
+   	& 
+   	\begin{lstlisting}
+if (myClass.compareTo(arg) < 0) {...}
+  	\end{lstlisting}  \\
+  	\hline
+	\begin{lstlisting}
+class Bar {
+  public boolean doSomething(){...}
+}
+class Foo extends Bar {
+  public boolean doSomething(){...}
+}
+  	\end{lstlisting} 
+   	& 
+   	\begin{lstlisting}
+class Bar {
+  public boolean doSomething(){...}
+}
+class Foo extends Bar {
+  @Override
+  public boolean doSomething(){...}
+}
+  	\end{lstlisting}  \\
+  	\hline
+	\begin{lstlisting}
+public void a(Map<String,Object> map) {
+  for (String key : map.keySet()) {  
+    Object value = map.get(key);
+    ...
+  }
+}
+  	\end{lstlisting} 
+   	& 
+   	\begin{lstlisting}
+public void a(Map<String,Object> map) {
+  for (Map.Entry<String,Object> entry : 
+  	map.entrySet()) {
+    String key = entry.getKey();
+    Object value = entry.getValue();
+    ...
+  }
+}
+  	\end{lstlisting}  \\
+  	\hline
+	\begin{lstlisting}
+foo.equals(bar.toUpperCase());
+  	\end{lstlisting} 
+   	& 
+   	\begin{lstlisting}
+foo.equalsIgnoreCase(bar);  
+  	\end{lstlisting}  \\
+  	\hline
+	\begin{lstlisting}
+switch (myVariable) {
+  case 0: // 6 lines till next case
+    methodCall1("");
+    methodCall2("");
+    methodCall3("");
+    methodCall4("");
+    break;
+  case 1:
+  ...
+}
+  	\end{lstlisting} 
+   	& 
+   	\begin{lstlisting}
+switch (myVariable) {
+  case 0:                  
+    doSomething()
+    break;
+  case 1:
+  ...
+}
+...
+private void doSomething(){
+    methodCall1("");
+    methodCall2("");
+    methodCall3("");
+    methodCall4("");
+} 
+  	\end{lstlisting}  \\
+  	\hline
+	\begin{lstlisting}
+public class MyClass {
+  private int foo = 42;
+
+  public int compute(int a) {
+    return a * 42;
+  }
+}
+  	\end{lstlisting} 
+   	& 
+   	\begin{lstlisting}
+public class MyClass {
+  public int compute(int a) {
+    return a * 42;
+  }
+}
+  	\end{lstlisting}  \\
+  	\hline
+	\begin{lstlisting}
+class A { 
+  private int field;
+}
+  	\end{lstlisting} 
+   	& 
+   	\begin{lstlisting}
+class A {
+  private int field;
+
+  A(int field) {
+    this.field = field;
+  }
+}
+  	\end{lstlisting}  \\
+  	\hline
+\end{tabular}  
+  
+\end{center} 
+
+\end{document}
