@@ -6,7 +6,6 @@ public class OverrideSampleBis extends OverrideSample {
     public void toto() {
     }
 
-    @Override
     public void tata() {
     }
 }
