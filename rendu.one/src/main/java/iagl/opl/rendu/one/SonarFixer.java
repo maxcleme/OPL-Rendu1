@@ -9,21 +9,19 @@ import spoon.Launcher;
 public class SonarFixer {
 	
 	/*
-	 * TODO
 	 * 
-	 * "compareTo" results should not be checked for specific values
-	 * [DONE] "@Override" annotation should be used on any method overriding (since Java 5) or implementing (since Java 6) another one
-	 * "entrySet()" should be iterated when both the key and value are needed
-	 * Case insensitive string comparisons should be made without intermediate upper or lower casing
-	 * "switch case" clauses should not have too many lines
-	 * Unused private fields should be removed
-	 * Classes and enums with private members should have a constructor
+	 * [FIND/DONE] "@Override" annotation should be used on any method overriding (since Java 5) or implementing (since Java 6) another one
+
+	 * TODO
+	 * [FIND] "switch case" clauses should not have too many lines
+	 * [FIND] Unused private fields should be removed
+	 * [FIND] Strings literals should be placed on the left side when checking for equality
+	 * [FIND] Exception types should not be tested using "instanceof" in catch blocks
 	 */
 	public static void main(String[] args) throws Exception {
 		String[] spoonArgs = { 
 				"-i", "/home/m2iagl/clement/Documents/workspace-sts-3.7.0.RELEASE/OPL-Rendu1/rendu.one/src/test/java/iagl/opl/rendu/one/samples", 
-				"-p", "iagl.opl.rendu.one.processors.OverrideProcessor",
-				"--with-imports",
+				"-p", "iagl.opl.rendu.one.processors.SwitchTooManyLinesProcessor",
 				"-v",
 				"-x"
 		};
