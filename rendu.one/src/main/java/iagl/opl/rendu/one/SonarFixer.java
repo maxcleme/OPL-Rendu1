@@ -26,6 +26,6 @@ public class SonarFixer {
 				"-x"
 		};
 
-		Launcher.main(spoonArgs);
-	}
+    Launcher.main(spoonArgs);
+  }
 }

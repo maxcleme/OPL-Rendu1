@@ -11,17 +11,56 @@
 
 
 \begin{document}
-
+\clearpage
+\vspace*{\fill}
+\begin{center}
+\begin{minipage}{.6\textwidth}
 \title{Sonar fixer}
 \author{Clement Maxime - Piorun Jordan}
 \date{\today}
 \maketitle
-\section{Transformation sonar}
-\par Nous avons commencé par identifier les erreurs majeures levées par sonar que nous voulions corriger. Dans cette première liste sont répertoriées les erreurs qui semblent aisément corrigeable :
+\end{minipage}
 
+\end{center}
+\vfill % equivalent to \vspace{\fill}
+\clearpage
 
+\newpage
 
+\section{Introduction}
+\par Pour de nombreux projets, nous avons recours a Sonar, un logiciel permettant de mesurer la qualité de notre code en continu. Le rapport de Sonar classe les améliorations a apporter en différentes catégories, des erreurs critiques aux simples informations.
+\\
+\par Pour notre projet, nous somme parti d'un simple constat : les erreurs sonar sont souvent les mêmes, et un nombre considérable d'entre elles pourrait être corrigées de façon automatique. Cela passe par deux étapes : premièrement il faut repérer le morceau de code qui est à l'origine de l'erreur, puis il faut ensuite le remplacer avec du code équivalent.
+\\
+\par pour ces deux besoins, nous avons choisis d'utiliser Spoon, une librairie développée à l'Inria permettant d'analyser et de transformer du code Java.
+
+\newpage
+\section{Analyse du code}
+\subsection{Le scope}
+
+\par Avant même de s'intéresser à la partie technique de ce projet, nous avons du établir la liste des erreurs que nous voulions corriger.
+\\
+\par Sonar classe les erreurs en 5 catégories : bloquantes, critiques, majeures, mineures et informatives. Parmi celles ci, nous avons jugé que les plus pertinentes, mais aussi les plus urgentes à corriger sont les erreurs majeures.
+\\
+\par En effet, les deux catégories au dessus gênent le bon fonctionnement du programme et sont donc en toute logique détectée au préalable par le développeur.
+\\
+\par Les niveaux de sévérité moins importants quant à eux relèvent plus de conventions de codages, de format de code ou autres problèmes pouvant gêner la compréhension du code. Nous gardons à l'idée que comprendre un code facilement est essentiel pour le maintenir, mais nous préférons mettre la priorité sur la catégorie restante : les erreurs majeures.
+\\
+\par Ces alertes Sonar proviennent de mauvaises pratiques de codage, qui ne gênent pas le bon déroulement du code, mais qui pour certaines d'entre elles, pourraient entrainer des erreurs lors d'ajout de code. Après cette première réduction du scope initial, nous avons fais le tri entre les alertes que nous pouvons corriger de façon automatique, et celles qui dépendent du contexte. Suite a cette seconde analyse, nous avons dressé le tableau en annexe 1 qui reprend les différentes alertes ainsi que la solution apportée.
+
+\subsection{Détection d'erreur}
+\par Afin de détecter les erreurs que nous voulons corriger, nous nous sommes appuyé sur la librairie Spoon, qui nous apporte une solution pour analyser du code Java. Pour chaque alerte, nous avons donc un une classe Processor associée dans laquelle nous décrivons le patern à rechercher. Lorsque cette fonction trouve du code qui match, nous pouvons commencer sa transformation.
+
+\section{La correction du code}
+
+\section{Test de notre projet}
+\subsection{Les test unitaires}
+\subsection{Test sur un projet de taille}
+
+\newpage
+\appendix
 \begin{center}
+	\section{Annexe 1 - Tableaux des correctifs}
 	\begin{tabular}{|p{0.45\textwidth}|p{0.45\textwidth}|}
   	\hline
 	  	\begin{center}
