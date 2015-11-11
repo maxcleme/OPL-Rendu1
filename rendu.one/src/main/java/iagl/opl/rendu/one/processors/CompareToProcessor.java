@@ -18,6 +18,7 @@ public class CompareToProcessor extends AbstractProcessor<CtInvocation<?>> {
   @Override
   public void process(CtInvocation<?> candidate) {
     System.out.println("Affichage ==> " + candidate.getParent(CtExpression.class));
+    System.out.println(candidate.getParent(CtExpression.class).getClass());
   }
 
 }

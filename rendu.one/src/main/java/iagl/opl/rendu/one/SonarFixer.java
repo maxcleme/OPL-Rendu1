@@ -22,7 +22,7 @@ public class SonarFixer {
   public static void main(String[] args) throws Exception {
     String[] spoonArgs = {
       "-i", "C:/Users/wokei/Documents/workspace-sts-3.7.1.RELEASE/OPL-Rendu1/rendu.one/src/test/java/iagl/opl/rendu/one/samples",
-      "-p", "iagl.opl.rendu.one.processors.CompareToProcessor",
+      "-p", "iagl.opl.rendu.one.processors.UnusedPrivateFieldsProcessor",
       "--with-imports",
       "-v",
       "-x"
