@@ -7,8 +7,9 @@ public class SwitchTooManyLinesSample {
 
 	private static final int CONSTANT = 3;
 
-	public int foo(int a, int b) {
+	public boolean foo(int a, int b) {
 		int random = new Random(System.currentTimeMillis()).nextInt(3);
+		String str = "toto";
 
 		switch (random) {
 		case 1:
@@ -21,16 +22,27 @@ public class SwitchTooManyLinesSample {
 				b *= i;
 				b += i * CONSTANT;
 			}
-		case 3:
+		case 3: {
 			if (a == 2) {
 				b++;
+				break;
 			}
 			b++;
 			b++;
 			b++;
-			return b;
+			break;
 		}
-		return a + b;
+		case 4:
+			final char ch0 = str.charAt(0);
+			if ((((ch0 == 'y') || (ch0 == 'Y')) || (ch0 == 't')) || (ch0 == 'T')) {
+				return Boolean.TRUE;
+			}
+			if ((((ch0 == 'n') || (ch0 == 'N')) || (ch0 == 'f')) || (ch0 == 'F')) {
+				return Boolean.FALSE;
+			}
+			break;
+		}
+		return a + b > 0;
 	}
 
 	public int bar(int a, int b) throws IOException {
@@ -52,9 +64,9 @@ public class SwitchTooManyLinesSample {
 				b *= i;
 				b += i * CONSTANT;
 			}
-			if ( a > 10 ){
+			if (a > 10) {
 				throw new RuntimeException("trolololololo");
-			}else{
+			} else {
 				throw new IOException("toto");
 			}
 		case "3":

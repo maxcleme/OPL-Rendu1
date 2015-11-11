@@ -1,13 +1,12 @@
 package iagl.opl.rendu.one.samples;
 
-import org.junit.Test;
 
 public class CompareToProcessorTest {
-    @Test
+    @org.junit.Test
     public void test() {
     }
 
-    void compareFoo(Integer a, Integer b) {
+    void compareFoo(java.lang.Integer a, java.lang.Integer b) {
         if ((a.compareTo(b)) == (-1)) {
             a = 2;
         } 
