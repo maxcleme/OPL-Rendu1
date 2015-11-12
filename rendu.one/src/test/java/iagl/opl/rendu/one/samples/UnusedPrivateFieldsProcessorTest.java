@@ -10,7 +10,9 @@ public class UnusedPrivateFieldsProcessorTest {
 
   @Test
   public void test() {
+    int a;
     b = 2;
+    a = b;
     fail("Not yet implemented");
   }
 
