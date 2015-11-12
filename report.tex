@@ -37,7 +37,8 @@
 
 \newpage
 \section{Analyse du code}
-\subsection{Le scope}
+\subsection{La méthodologie}
+comment on a choisi nos regles -> choix en fonction des projets
 
 \par Avant même de s'intéresser à la partie technique de ce projet, nous avons du établir la liste des erreurs que nous voulions corriger.
 \\
@@ -49,16 +50,18 @@
 \\
 \par Ces alertes Sonar proviennent de mauvaises pratiques de codage, qui ne gênent pas le bon déroulement du code, mais qui pour certaines d'entre elles, pourraient entrainer des erreurs lors d'ajout de code. Après cette première réduction du scope initial, nous avons fais le tri entre les alertes que nous pouvons corriger de façon automatique, et celles qui dépendent du contexte. Suite a cette seconde analyse, nous avons dressé le tableau en annexe 1 qui reprend les différentes alertes ainsi que la solution apportée.
 
-\subsection{Détection d'erreur}
-\par Afin de détecter les erreurs que nous voulons corriger, nous nous sommes appuyé sur la librairie Spoon, qui nous apporte une solution pour analyser du code Java. Pour chaque alerte, nous avons donc un une classe Processor associée dans laquelle nous décrivons le pattern à rechercher. Lorsque cette fonction trouve du code qui match, nous pouvons commencer sa transformation.
+\subsection{les règles définies}
 
-\section{La correction du code}
+\subsection{Correction d'erreur}
+\par Afin de détecter les erreurs que nous voulons corriger, nous nous sommes appuyé sur la librairie Spoon, qui nous apporte une solution pour analyser du code Java. Pour chaque alerte, nous avons donc un une classe Processor associée dans laquelle nous décrivons le pattern à rechercher. Lorsque cette fonction trouve du code qui match, nous pouvons commencer sa transformation.
 
 \section{Évaluation}
 \subsection{Les test unitaires}
+couverture de test et pourcentage de mutation (partie courte)
+\subsection{Test sur un projet de taille}
 \subsection{Projets réels}
 \par Dans le but de valider notre approche, nous avons décider de prendre des gros projets open-source possédant les alertes que nous sommes en mesure de réparer automatiquement. Ces projets sont les suivants : commons-lang, commons-math, log4j. L'annexe 2 montre les résultats obtenus suite à nos modifications. 
-
+ajouter un comparatif entre projet git et projet spoon sans processor.
 
 
 \newpage

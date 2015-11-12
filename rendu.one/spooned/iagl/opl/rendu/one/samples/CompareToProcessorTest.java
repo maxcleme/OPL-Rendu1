@@ -2,15 +2,21 @@ package iagl.opl.rendu.one.samples;
 
 
 public class CompareToProcessorTest {
-    @org.junit.Test
+    private int b;
+
+    @Test
     public void test() {
+        b = 3;
     }
 
-    void compareFoo(java.lang.Integer a, java.lang.Integer b) {
+    boolean compareFoo(Integer a, Integer b) {
+        this.b = 2;
+        a = this.b;
         if ((a.compareTo(b)) == (-1)) {
             a = 2;
         } 
         a = -2;
+        return (a.compareTo(b)) == 1;
     }
 }
 
