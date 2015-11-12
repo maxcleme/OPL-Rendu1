@@ -11,6 +11,7 @@ import spoon.reflect.code.CtBlock;
 import spoon.reflect.code.CtBreak;
 import spoon.reflect.code.CtCFlowBreak;
 import spoon.reflect.code.CtCase;
+import spoon.reflect.code.CtForEach;
 import spoon.reflect.code.CtInvocation;
 import spoon.reflect.code.CtLocalVariable;
 import spoon.reflect.code.CtReturn;
@@ -74,7 +75,7 @@ public class SwitchTooManyLinesProcessor extends AbstractProcessor<CtSwitch<?>> 
 
 			CtReturn<?> ctReturn = (CtReturn<?>) flowBreaks.stream().filter(elem -> elem instanceof CtReturn).findAny()
 					.orElse(null);
-			CtTypeReference ctReturnType = ctReturn != null ? ctReturn.getReturnedExpression().getType()
+			CtTypeReference ctReturnType = ctReturn != null ? ctParentMethod.getType()
 					: getFactory().Core().createTypeReference().setSimpleName("void");
 
 			Set<CtThrow> ctThrows = flowBreaks.stream().filter(elem -> elem instanceof CtThrow)
@@ -82,6 +83,7 @@ public class SwitchTooManyLinesProcessor extends AbstractProcessor<CtSwitch<?>> 
 			Set<CtTypeReference<? extends Throwable>> ctThrowTypes = ctThrows.stream()
 					.map(elem -> elem.getThrownExpression().getType()).collect(Collectors.toSet());
 			Set<CtVariableReference<Object>> variables = getVariables(caseElement);
+			initVariableIfNot(variables);
 			caseElement.setStatements(computeStatements(caseElement.getStatements()));
 
 			ctMethod.setSimpleName(createMethodName(caseElement, ctParentMethod));
@@ -99,6 +101,12 @@ public class SwitchTooManyLinesProcessor extends AbstractProcessor<CtSwitch<?>> 
 				param.setType((CtTypeReference) var.getType());
 				ctMethod.addParameter(param);
 			});
+			if (ctReturnType != null && !ctReturnType.getSimpleName().equals("void")
+					&& !(ctMethod.getBody().getLastStatement() instanceof CtReturn)
+					&& !(ctMethod.getBody().getLastStatement() instanceof CtThrow)) {
+				ctMethod.getBody().addStatement(getFactory().Core().createReturn()
+						.setReturnedExpression(getFactory().Code().createCodeSnippetExpression("null")));
+			}
 
 			ctClass.addMethod(ctMethod);
 
@@ -112,11 +120,25 @@ public class SwitchTooManyLinesProcessor extends AbstractProcessor<CtSwitch<?>> 
 
 			System.out.println(ctMethod);
 
-			caseElement.getStatements().removeIf(statement -> !(statement instanceof CtBreak));
-			caseElement.getStatements().add(methodInvocation);
-			Collections.reverse(caseElement.getStatements());
+			if (ctReturnType != null && !ctReturnType.getSimpleName().equals("void")) {
+				caseElement.getStatements().clear();
+				caseElement.getStatements()
+						.add(getFactory().Core().createReturn().setReturnedExpression(methodInvocation));
+			} else {
+				caseElement.getStatements().removeIf(statement -> !(statement instanceof CtBreak));
+				caseElement.getStatements().add(methodInvocation);
+				Collections.reverse(caseElement.getStatements());
+			}
 		}
 
+	}
+
+	private void initVariableIfNot(Set<CtVariableReference<Object>> variables) {
+		variables.stream().filter(var -> var.getDeclaration().getDefaultExpression() == null)
+				.filter(var -> var.getDeclaration() instanceof CtLocalVariable)
+				.filter(var -> !(var.getDeclaration().getParent() instanceof CtForEach)).forEach(var -> {
+					var.getDeclaration().setDefaultExpression(getFactory().Code().createCodeSnippetExpression("null"));
+				});
 	}
 
 	private List<CtStatement> computeStatements(List<CtStatement> statements) {

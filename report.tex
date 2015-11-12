@@ -4,6 +4,7 @@
 \usepackage{geometry}
 \usepackage{array}
 \usepackage{listings}
+\usepackage{multirow}
 
 \geometry{lmargin=2cm,rmargin=2cm,vmargin=2cm,hmargin=2cm}
 
@@ -49,13 +50,16 @@
 \par Ces alertes Sonar proviennent de mauvaises pratiques de codage, qui ne gênent pas le bon déroulement du code, mais qui pour certaines d'entre elles, pourraient entrainer des erreurs lors d'ajout de code. Après cette première réduction du scope initial, nous avons fais le tri entre les alertes que nous pouvons corriger de façon automatique, et celles qui dépendent du contexte. Suite a cette seconde analyse, nous avons dressé le tableau en annexe 1 qui reprend les différentes alertes ainsi que la solution apportée.
 
 \subsection{Détection d'erreur}
-\par Afin de détecter les erreurs que nous voulons corriger, nous nous sommes appuyé sur la librairie Spoon, qui nous apporte une solution pour analyser du code Java. Pour chaque alerte, nous avons donc un une classe Processor associée dans laquelle nous décrivons le patern à rechercher. Lorsque cette fonction trouve du code qui match, nous pouvons commencer sa transformation.
+\par Afin de détecter les erreurs que nous voulons corriger, nous nous sommes appuyé sur la librairie Spoon, qui nous apporte une solution pour analyser du code Java. Pour chaque alerte, nous avons donc un une classe Processor associée dans laquelle nous décrivons le pattern à rechercher. Lorsque cette fonction trouve du code qui match, nous pouvons commencer sa transformation.
 
 \section{La correction du code}
 
-\section{Test de notre projet}
+\section{Évaluation}
 \subsection{Les test unitaires}
-\subsection{Test sur un projet de taille}
+\subsection{Projets réels}
+\par Dans le but de valider notre approche, nous avons décider de prendre des gros projets open-source possédant les alertes que nous sommes en mesure de réparer automatiquement. Ces projets sont les suivants : commons-lang, commons-math, log4j. L'annexe 2 montre les résultats obtenus suite à nos modifications. 
+
+
 
 \newpage
 \appendix
@@ -190,6 +194,34 @@ class A {
   	\end{lstlisting}  \\
   	\hline
 \end{tabular}  
+\end{center} 
+
+\newpage
+\begin{center}
+	
+	\begin{table}[]
+\centering
+\caption{Évaluation}
+\label{my-label}
+\begin{tabular}{c|c|c|c|c|c|}
+\cline{2-6}
+                                                    & Alerte ID           & Alertes & Alertes Fixés & \% Alertes Fixés & Test degradé \\ \hline
+\multicolumn{1}{|c|}{\multirow{5}{*}{Commons-lang}} & ID\_override        & 2       &               &                  &              \\ \cline{2-6} 
+\multicolumn{1}{|c|}{}                              & ID\_switch          & 23      & 23            & 100\%            & 1            \\ \cline{2-6} 
+\multicolumn{1}{|c|}{}                              & ID\_private\_field  & 4       &               &                  &              \\ \cline{2-6} 
+\multicolumn{1}{|c|}{}                              & ID\_equals          & 17      &               &                  &              \\ \cline{2-6} 
+\multicolumn{1}{|c|}{}                              & ID\_instanceof\_try & 1       &               &                  &              \\ \hline
+\multicolumn{1}{|c|}{\multirow{3}{*}{Commons-math}} & ID\_override        & 26      &               &                  &              \\ \cline{2-6} 
+\multicolumn{1}{|c|}{}                              & ID\_switch          & 96      &               &                  &              \\ \cline{2-6} 
+\multicolumn{1}{|c|}{}                              & ID\_equals          & 17      &               &                  &              \\ \hline
+\multicolumn{1}{|c|}{\multirow{4}{*}{Log4j}}        & ID\_override        & 108     &               &                  &              \\ \cline{2-6} 
+\multicolumn{1}{|c|}{}                              & ID\_switch          & 29      &               &                  &              \\ \cline{2-6} 
+\multicolumn{1}{|c|}{}                              & ID\_equals          & 26      &               &                  &              \\ \cline{2-6} 
+\multicolumn{1}{|c|}{}                              & ID\_instanceof\_try & 36      &               &                  &              \\ \hline
+\end{tabular}
+\end{table}
+	
+	
   
 \end{center} 
 
