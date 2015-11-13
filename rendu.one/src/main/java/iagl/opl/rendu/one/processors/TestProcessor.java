@@ -23,22 +23,22 @@ public class TestProcessor extends AbstractProcessor<CtField<?>> {
 
     CtPackage rootPackage = getFactory().Package().getRootPackage();
 
-    System.out.println(rootPackage.getElements(new YoloFilter(ctFieldReference)));
+    System.out.println(rootPackage.getElements(new CustomFilter(ctFieldReference)));
   }
 
-  private class YoloFilter extends FieldAccessFilter {
+  private class CustomFilter extends FieldAccessFilter {
 
     private CtFieldReference<?> field;
 
-    public YoloFilter(CtFieldReference<?> field) {
+    public CustomFilter(CtFieldReference<?> field) {
       super(field);
       this.field = field;
     }
 
     @Override
     public boolean matches(CtFieldAccess<?> variableAccess) {
-      System.out.println("1:" + field.getQualifiedName());
-      System.out.println("2:" + variableAccess.getVariable().getQualifiedName());
+      // System.out.println("1:" + field.getQualifiedName());
+      // System.out.println("2:" + variableAccess.getVariable().getQualifiedName());
       return field.getQualifiedName().equals(variableAccess.getVariable().getQualifiedName());
     }
 
