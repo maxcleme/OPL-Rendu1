@@ -4,6 +4,7 @@
 \usepackage{geometry}
 \usepackage{array}
 \usepackage{listings}
+\usepackage{multirow}
 
 \geometry{lmargin=2cm,rmargin=2cm,vmargin=2cm,hmargin=2cm}
 
@@ -37,28 +38,39 @@
 \newpage
 \section{Analyse du code}
 \subsection{La méthodologie}
-comment on a choisi nos regles -> choix en fonction des projets
+\subsubsection{Une première approche}
 
 \par Avant même de s'intéresser à la partie technique de ce projet, nous avons du établir la liste des erreurs que nous voulions corriger.
 \\
-\par Sonar classe les erreurs en 5 catégories : bloquantes, critiques, majeures, mineures et informatives. Parmi celles ci, nous avons jugé que les plus pertinentes, mais aussi les plus urgentes à corriger sont les erreurs majeures.
+\par Sonar classe les erreurs en 5 catégories : bloquantes, critiques, majeures, mineures et informatives. Parmi celles ci, notre attention s'est tout particulièrement portée sur les erreurs majeures. En effet, elles semblent être les plus rependues dans les projets, et peuvent pour certaines d'entre elles rendre un projet difficilement maintenable.
 \\
-\par En effet, les deux catégories au dessus gênent le bon fonctionnement du programme et sont donc en toute logique détectée au préalable par le développeur.
+\par Après cette première réduction du scope initial, nous avons fais le tri entre les alertes que nous pouvons corriger de façon automatique, et celles qui dépendent du contexte. Au terme de cette seconde analyse, nous avons dressé le tableau en annexe 1 qui reprend les différentes alertes ainsi que la solution apportée.
+
+\subsubsection{Une approche plus pertinente}
+\par Suite à cette première approche du problème nous nous sommes rapidement heurté à un problème : comment tester nos résultats ? L'idée initiale était de sélectionner des projets open source, que nous récupérons sur github, afin que sonar puisse effectuer un premier diagnostic. Notre programme s'occupe ensuite de corriger les erreurs que nous avons cibler, et un deuxième diagnostique permet de confirmer que le nombre d'alerte a effectivement baissé. 
 \\
-\par Les niveaux de sévérité moins importants quant à eux relèvent plus de conventions de codages, de format de code ou autres problèmes pouvant gêner la compréhension du code. Nous gardons à l'idée que comprendre un code facilement est essentiel pour le maintenir, mais nous préférons mettre la priorité sur la catégorie restante : les erreurs majeures.
+\par Cependant, il est difficile de trouver des projets qui contiennent certaines erreurs bien spécifiques, d'autant plus que certaines d'entre elles relèvent de pratiques si mauvaises qu'il est très peu probable d'en croiser. Nous avons donc changé notre raisonnement en choisissant d'abord des projets que nous jugeons fiable, avec une communauté importante et une taille conséquente. Nous l'avons donné à analyser auprès de sonar, et nous avons choisis des alertes pertinentes parmi celles relevées.
 \\
-\par Ces alertes Sonar proviennent de mauvaises pratiques de codage, qui ne gênent pas le bon déroulement du code, mais qui pour certaines d'entre elles, pourraient entrainer des erreurs lors d'ajout de code. Après cette première réduction du scope initial, nous avons fais le tri entre les alertes que nous pouvons corriger de façon automatique, et celles qui dépendent du contexte. Suite a cette seconde analyse, nous avons dressé le tableau en annexe 1 qui reprend les différentes alertes ainsi que la solution apportée.
+\par Cette seconde approche, basée sur les projets Commons-Lang, Commons-math et Log4j, nous a permis de dresser une nouvelle liste d'erreurs dont nous voulons automatiser la réparation.
+
 
 \subsection{les règles définies}
 
 \subsection{Correction d'erreur}
-\par Afin de détecter les erreurs que nous voulons corriger, nous nous sommes appuyé sur la librairie Spoon, qui nous apporte une solution pour analyser du code Java. Pour chaque alerte, nous avons donc un une classe Processor associée dans laquelle nous décrivons le patern à rechercher. Lorsque cette fonction trouve du code qui match, nous pouvons commencer sa transformation.
+\par Afin de détecter les erreurs que nous voulons corriger, nous nous sommes appuyé sur la librairie Spoon, qui nous apporte une solution pour analyser du code Java. Pour chaque alerte, nous avons donc un une classe Processor associée dans laquelle nous décrivons le pattern à rechercher. Lorsque cette fonction trouve du code qui match, nous pouvons commencer sa transformation.
 
-\section{Test de notre projet}
+\section{Évaluation}
 \subsection{Les test unitaires}
 couverture de test et pourcentage de mutation (partie courte)
-\subsection{Test sur un projet de taille}
+\subsection{Impacte de spoon sur le code}
+\par Afin de mesurer l'impact de notre programme de résolution d'alerte Sonar, notre première démarche a été de différentier les changements duent à l'exécution du code que nous avons écris, de ceux qui relèvent d'une simple exécution de la librairie spoon. En effet, afin de permettre une manipulation du code java, spoon forme un arbre syntaxique abstrait à partir du code qui lui est envoyé en entrée. Une fois qu'il effectue le processus inverse (arbre syntaxique abstrait vers du code visant à être compilé) il est possible que des éléments parasites soient insérés. Par élément parasite, nous comprenons de la syntaxe qui n'était pas présente précédemment, comme des parenthèses optionnelles, des lignes vides ou encore une indentation.
+\\
+\par Suite à cette première analyse, nous avons pu déterminer que ...
+\subsection{Projets réels}
+\par Dans le but de valider notre approche, l'étape suivante était de confronter notre programme à des projets open-source de tailles conséquentes possédant les alertes que nous sommes en mesure de réparer automatiquement. Ces projets sont les suivants : commons-lang, commons-math, log4j. L'annexe 2 montre les résultats obtenus suite à nos modifications. 
 ajouter un comparatif entre projet git et projet spoon sans processor.
+
+
 \newpage
 \appendix
 \begin{center}
@@ -192,6 +204,34 @@ class A {
   	\end{lstlisting}  \\
   	\hline
 \end{tabular}  
+\end{center} 
+
+\newpage
+\begin{center}
+	
+	\begin{table}[]
+\centering
+\caption{Évaluation}
+\label{my-label}
+\begin{tabular}{c|c|c|c|c|c|}
+\cline{2-6}
+                                                    & Alerte ID           & Alertes & Alertes Fixés & \% Alertes Fixés & Test degradé \\ \hline
+\multicolumn{1}{|c|}{\multirow{5}{*}{Commons-lang}} & ID\_override        & 2       &               &                  &              \\ \cline{2-6} 
+\multicolumn{1}{|c|}{}                              & ID\_switch          & 23      & 23            & 100\%            & 1            \\ \cline{2-6} 
+\multicolumn{1}{|c|}{}                              & ID\_private\_field  & 4       &               &                  &              \\ \cline{2-6} 
+\multicolumn{1}{|c|}{}                              & ID\_equals          & 17      &               &                  &              \\ \cline{2-6} 
+\multicolumn{1}{|c|}{}                              & ID\_instanceof\_try & 1       &               &                  &              \\ \hline
+\multicolumn{1}{|c|}{\multirow{3}{*}{Commons-math}} & ID\_override        & 26      &               &                  &              \\ \cline{2-6} 
+\multicolumn{1}{|c|}{}                              & ID\_switch          & 96      &               &                  &              \\ \cline{2-6} 
+\multicolumn{1}{|c|}{}                              & ID\_equals          & 17      &               &                  &              \\ \hline
+\multicolumn{1}{|c|}{\multirow{4}{*}{Log4j}}        & ID\_override        & 108     &               &                  &              \\ \cline{2-6} 
+\multicolumn{1}{|c|}{}                              & ID\_switch          & 29      &               &                  &              \\ \cline{2-6} 
+\multicolumn{1}{|c|}{}                              & ID\_equals          & 26      &               &                  &              \\ \cline{2-6} 
+\multicolumn{1}{|c|}{}                              & ID\_instanceof\_try & 36      &               &                  &              \\ \hline
+\end{tabular}
+\end{table}
+	
+	
   
 \end{center} 
 

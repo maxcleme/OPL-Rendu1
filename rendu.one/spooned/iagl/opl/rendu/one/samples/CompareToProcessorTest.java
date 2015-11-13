@@ -1,5 +1,6 @@
 package iagl.opl.rendu.one.samples;
 
+import org.junit.Test;
 
 public class CompareToProcessorTest {
     private int b;
