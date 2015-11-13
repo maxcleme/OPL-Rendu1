@@ -10,7 +10,9 @@ public class UnusedPrivateFieldsProcessorTest {
 
     @Test
     public void test() {
+        int a;
         b = 2;
+        this.a = b;
         Assert.fail("Not yet implemented");
     }
 

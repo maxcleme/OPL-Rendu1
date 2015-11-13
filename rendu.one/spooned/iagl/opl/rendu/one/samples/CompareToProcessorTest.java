@@ -5,9 +5,12 @@ import org.junit.Test;
 public class CompareToProcessorTest {
     private int b;
 
+    private Integer a;
+
     @Test
     public void test() {
-        b = 3;
+        this.b = 3;
+        this.a = 1;
     }
 
     boolean compareFoo(Integer a, Integer b) {
@@ -17,7 +20,11 @@ public class CompareToProcessorTest {
             a = 2;
         } 
         a = -2;
-        return (a.compareTo(b)) == 1;
+        boolean yolo = (this.a.compareTo(b)) > 0;
+        return (this.b) > 2;
+    }
+
+    public void toto(int a) {
     }
 }
 
