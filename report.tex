@@ -5,6 +5,7 @@
 \usepackage{array}
 \usepackage{listings}
 \usepackage{multirow}
+\usepackage{hyperref}
 
 \geometry{lmargin=2cm,rmargin=2cm,vmargin=2cm,hmargin=2cm}
 
@@ -29,11 +30,11 @@
 \newpage
 
 \section{Introduction}
-\par Pour de nombreux projets, nous avons recours a Sonar, un logiciel permettant de mesurer la qualité de notre code en continu. Le rapport de Sonar classe les améliorations a apporter en différentes catégories, des erreurs critiques aux simples informations.
+\par Pour de nombreux projets, nous avons recours a Sonar, un logiciel permettant de mesurer la qualité de notre code en continu. Sonar classe les améliorations a apporter en différentes catégories, des erreurs critiques aux simples informations.
 \\
 \par Pour notre projet, nous somme parti d'un simple constat : les erreurs sonar sont souvent les mêmes, et un nombre considérable d'entre elles pourrait être corrigées de façon automatique. Cela passe par deux étapes : premièrement il faut repérer le morceau de code qui est à l'origine de l'erreur, puis il faut ensuite le remplacer avec du code équivalent.
 \\
-\par pour ces deux besoins, nous avons choisis d'utiliser Spoon, une librairie développée à l'Inria permettant d'analyser et de transformer du code Java.
+\par Pour ces deux besoins, nous avons choisis d'utiliser Spoon, une librairie développée à l'Inria permettant d'analyser et de transformer du code Java.
 
 \newpage
 \section{Analyse du code}
@@ -44,24 +45,63 @@ comment on a choisi nos regles -> choix en fonction des projets
 \\
 \par Sonar classe les erreurs en 5 catégories : bloquantes, critiques, majeures, mineures et informatives. Parmi celles ci, nous avons jugé que les plus pertinentes, mais aussi les plus urgentes à corriger sont les erreurs majeures.
 \\
-\par En effet, les deux catégories au dessus gênent le bon fonctionnement du programme et sont donc en toute logique détectée au préalable par le développeur.
+\par En effet, les deux catégories au dessus gênent souvent le bon fonctionnement du programme et sont donc en toute logique détectée au préalable par le développeur. Dans le cas où le programme fonctionnerait malgré ces erreurs, elles sont souvent très peu nombreuses, et donc rapide à corriger.
 \\
-\par Les niveaux de sévérité moins importants quant à eux relèvent plus de conventions de codages, de format de code ou autres problèmes pouvant gêner la compréhension du code. Nous gardons à l'idée que comprendre un code facilement est essentiel pour le maintenir, mais nous préférons mettre la priorité sur la catégorie restante : les erreurs majeures.
+\par Les niveaux de sévérité moins importants quant à eux relèvent plus de conventions de codages ou autres problèmes pouvant gêner la compréhension du code. Nous gardons à l'idée que comprendre un code facilement est essentiel pour le maintenir, mais nous préférons mettre la priorité sur la catégorie restante : les erreurs majeures.
+\\
+\par En ce basant sur les tests unitaires, nos transformations ne devront pas faire régresser le code sinon la transformations ne seras pas considéré comme acceptable. 
+
+
+\subsection{Les règles définies}
+
+\par Afin de choisir les différentes règles que nous corrigerons de manière automatique, nous avons pensé directement à l'évaluation. Nous avons fait analyser des gros projet open-source tel que Apache Commons-lang\footnote{\url{https://github.com/apache/commons-lang}} et Apache Commons-math\footnote{\url{https://github.com/apache/commons-math}}, et nous avons choisi notre ensemble d'erreur parmi celle relevé par Sonar.
 \\
 \par Ces alertes Sonar proviennent de mauvaises pratiques de codage, qui ne gênent pas le bon déroulement du code, mais qui pour certaines d'entre elles, pourraient entrainer des erreurs lors d'ajout de code. Après cette première réduction du scope initial, nous avons fais le tri entre les alertes que nous pouvons corriger de façon automatique, et celles qui dépendent du contexte. Suite a cette seconde analyse, nous avons dressé le tableau en annexe 1 qui reprend les différentes alertes ainsi que la solution apportée.
-
-\subsection{les règles définies}
 
 \subsection{Correction d'erreur}
 \par Afin de détecter les erreurs que nous voulons corriger, nous nous sommes appuyé sur la librairie Spoon, qui nous apporte une solution pour analyser du code Java. Pour chaque alerte, nous avons donc un une classe Processor associée dans laquelle nous décrivons le pattern à rechercher. Lorsque cette fonction trouve du code qui match, nous pouvons commencer sa transformation.
 
+
+
+
 \section{Évaluation}
 \subsection{Les test unitaires}
 couverture de test et pourcentage de mutation (partie courte)
-\subsection{Test sur un projet de taille}
 \subsection{Projets réels}
-\par Dans le but de valider notre approche, nous avons décider de prendre des gros projets open-source possédant les alertes que nous sommes en mesure de réparer automatiquement. Ces projets sont les suivants : commons-lang, commons-math, log4j. L'annexe 2 montre les résultats obtenus suite à nos modifications. 
-ajouter un comparatif entre projet git et projet spoon sans processor.
+\par Dans le but de valider notre approche, nous avons décider de prendre des gros projets. Ces projets sont les suivants : Apache Commons-lang, Apache Commons-math. L'annexe 2 montre les résultats obtenus suite à nos transformation.
+\\
+\par Les projets utilisés ne sont pas simplement les clones des répertoires GitHub respectifs. Pour chacun des projets nous avons choisi comme point de départ le résultat renvoyer par Spoon sans appliquer une seule transformation de notre part. En effet, le comportement de Spoon est de créer l'AST\footnote{Abstract Synthax Tree} represensant le code source, d'appliquer les transformations spécifié par le développeur, et pour finir de convertir l'AST en code source. Durant ce processus Spoon est susceptible de rajouter ou de perdre de l'information (ex : les parenthèses), c'est pourquoi nous avons choisi ce résultat comme point de départ.
+
+
+\section{Difficultés}
+\par Comme l'indique l'annexe 2, certaine de nos transformations ont provoqué une régression. Ces régressions peuvent s'explique de différentes manières.
+
+\subsection{Spoon}
+\par Pour Apache Commons-math, Spoon produit des NullPointer\footnote{\url{http://docs.oracle.com/javase/8/docs/api/java/lang/NullPointerException.html}} lors de l'utilisation de Filter\footnote{\url{http://spoon.gforge.inria.fr/filter.html}} pour une raison encore inconnu.
+
+\subsection{Comportement rechercher}
+\par Il est arrivait que le comportement des tests aillent à l'encontre des règles de Sonar. Par exemple, pour Apache Commons-lang, nous avons voulu supprimer les attributs inutilisés d'une classe. Cependant 5 tests concernant la réflectivité consistaient à accéder à ces champs de manières dynamiques. Il nous est donc impossible de prévoir ce comportement.
+
+\subsection{Passage par copie}
+\par Le but d'une des transformations est de réduire le nombre de ligne entre deux cases afin que ce nombre n'excède pas 5. Notre approche à était de créer des sous-méthodes regroupant le contenu du case afin de garder le comportement initial du programme. Pour que le code source reste cohérent et compilable, nous avons du récupérer tous le contexte avant l'exécution du case, et le passer en paramètre a notre sous-méthodes. Cependant, même une fois cette étape réaliser, nous avons pu observer de forte régression du code source. Cela s'explique à cause d'une des spécificité de Java, le passage de copie\footnote{\url{https://docs.oracle.com/javase/tutorial/java/javaOO/arguments.html}}.
+\\
+\par 
+En effet, lors d'un appel de méthode, Java crée une copie de l'objet afin de le passer en paramètre. Si à l'intérieur de la méthode, nous modifions la valeur d'un paramètre (=), alors il n'y a pas d'effet de bord dans le case initial et le comportement initial n'est pas respecter. Cependant, si l'on modifie un attribut de l'objet passé en paramètre alors l'effet de bord est possible. La solution à donc était la suivante :
+
+\begin{enumerate}
+	\item Parmis les variables du contexte, déterminer celles qui seront modifier dans la méthode.
+	\item Pour chacune d'entre elles, 
+	\begin{enumerate}
+	\item Créer un objet qui les encapsuleras (attribut).
+	\item Remplacer le type par le nouveau.
+	\item Remplacer tout les accès par l'appel du Getter
+	\item Remplacer toute les affections par l'appel du Setter
+	\end{enumerate}
+	
+\end{enumerate}	
+
+\par
+Cependant, sûrement suite à un problème d'implémentation, cette solution produit de la régression lorsque des cases sont imbriqué dans l'AST (pas forcement directement).
 
 
 \newpage
@@ -164,17 +204,16 @@ if ( bar.equals("foo") ){
 	
 	\begin{table}[]
 \centering
-\caption{Évaluation}
-\label{my-label}
+\section{Annexe 2 - Évaluation}
 \begin{tabular}{c|c|c|c|c|c|}
 \cline{2-6}
                                                     & Alerte ID           & Alertes & Alertes Fixés & \% Alertes Fixés & Test degradé \\ \hline
 \multicolumn{1}{|c|}{\multirow{5}{*}{Commons-lang}} & ID\_override        & 2       & 2             & 100\%            & 0            \\ \cline{2-6} 
 \multicolumn{1}{|c|}{}                              & ID\_switch          & 21      & 21            & 100\%            & 3            \\ \cline{2-6} 
-\multicolumn{1}{|c|}{}                              & ID\_private\_field  & 4       &               &                  &              \\ \cline{2-6} 
+\multicolumn{1}{|c|}{}                              & ID\_private\_field  & 4       & 4             & 100\%            & 5            \\ \cline{2-6} 
 \multicolumn{1}{|c|}{}                              & ID\_equals          & 17      & 17            & 100\%            & 0            \\ \hline 
 \multicolumn{1}{|c|}{\multirow{3}{*}{Commons-math}} & ID\_override        & 9       & 9             & 100\%            & 0            \\ \cline{2-6} 
-\multicolumn{1}{|c|}{}                              & ID\_switch          & 61      &               &                  &              \\ \cline{2-6} 
+\multicolumn{1}{|c|}{}                              & ID\_switch          & 61      & N/A           & N/A              & N/A          \\ \cline{2-6} 
 \multicolumn{1}{|c|}{}                              & ID\_equals          & 9       & 9             & 100\%            & 0            \\ \hline
 \end{tabular}
 \end{table}

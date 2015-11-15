@@ -28,21 +28,21 @@ public class SonarFixer {
 	 */
 	public static void main(String[] args) throws Exception {
 		// COMMONS LANG
+		 String[] spoonArgs = { 
+				 "-i", "C:\\workspace\\OPL_Sample\\commons-lang\\src\\main\\java;C:\\workspace\\OPL_Sample\\commons-lang\\src\\test\\java", 
+				 "-p", "iagl.opl.rendu.one.processors.UnusedPrivateFieldProcessor",
+				 "--source-classpath",
+				 "C:\\Users\\RMS\\.m2\\repository\\junit\\junit\\4.12\\junit-4.12.jar;C:\\Users\\RMS\\.m2\\repository\\org\\hamcrest\\hamcrest-core\\1.3\\hamcrest-core-1.3.jar;C:\\Users\\RMS\\.m2\\repository\\org\\hamcrest\\hamcrest-all\\1.3\\hamcrest-all-1.3.jar;C:\\Users\\RMS\\.m2\\repository\\commons-io\\commons-io\\2.4\\commons-io-2.4.jar;C:\\Users\\RMS\\.m2\\repository\\org\\easymock\\easymock\\3.4\\easymock-3.4.jar;C:\\Users\\RMS\\.m2\\repository\\org\\objenesis\\objenesis\\2.2\\objenesis-2.2.jar",
+				 "-o", "C:\\workspace\\SPOONED\\commons-lang\\src\\main\\java",
+				 "--with-imports" };
+		// COMMONS MATH
 //		 String[] spoonArgs = { 
-//				 "-i", "C:\\workspace\\OPL_Sample\\commons-lang\\src\\main\\java;C:\\workspace\\OPL_Sample\\commons-lang\\src\\test\\java", 
+//				 "-i", "C:\\workspace\\OPL_Sample\\commons-math\\src\\main;C:\\workspace\\OPL_Sample\\commons-math\\src\\test",
 //				 "-p", "iagl.opl.rendu.one.processors.SwitchTooManyLinesProcessor",
 //				 "--source-classpath",
-//				 "C:\\Users\\RMS\\.m2\\repository\\junit\\junit\\4.12\\junit-4.12.jar;C:\\Users\\RMS\\.m2\\repository\\org\\hamcrest\\hamcrest-core\\1.3\\hamcrest-core-1.3.jar;C:\\Users\\RMS\\.m2\\repository\\org\\hamcrest\\hamcrest-all\\1.3\\hamcrest-all-1.3.jar;C:\\Users\\RMS\\.m2\\repository\\commons-io\\commons-io\\2.4\\commons-io-2.4.jar;C:\\Users\\RMS\\.m2\\repository\\org\\easymock\\easymock\\3.4\\easymock-3.4.jar;C:\\Users\\RMS\\.m2\\repository\\org\\objenesis\\objenesis\\2.2\\objenesis-2.2.jar",
-//				 "-o", "C:\\workspace\\SPOONED\\commons-lang\\src\\main\\java",
+//				 "C:\\Users\\RMS\\.m2\\repository\\junit\\junit\\4.11\\junit-4.11.jar;C:\\Users\\RMS\\.m2\\repository\\org\\hamcrest\\hamcrest-core\\1.3\\hamcrest-core-1.3.jar",
+//				 "-o", "C:\\workspace\\SPOONED\\commons-math\\src\\main\\java",
 //				 "--with-imports" };
-		// COMMONS MATH
-		 String[] spoonArgs = { 
-				 "-i", "C:\\workspace\\OPL_Sample\\commons-math\\src\\main;C:\\workspace\\OPL_Sample\\commons-math\\src\\test",
-				 "-p", "iagl.opl.rendu.one.processors.SwitchTooManyLinesProcessor",
-				 "--source-classpath",
-				 "C:\\Users\\RMS\\.m2\\repository\\junit\\junit\\4.11\\junit-4.11.jar;C:\\Users\\RMS\\.m2\\repository\\org\\hamcrest\\hamcrest-core\\1.3\\hamcrest-core-1.3.jar",
-				 "-o", "C:\\workspace\\SPOONED\\commons-math\\src\\main\\java",
-				 "--with-imports" };
 		// LOG4J
 //		String[] spoonArgs = { 
 //				"-i", "C:\\workspace\\OPL_Sample\\log4j\\src\\main\\java;C:\\workspace\\OPL_Sample\\log4j\\tests\\src\\java", 
