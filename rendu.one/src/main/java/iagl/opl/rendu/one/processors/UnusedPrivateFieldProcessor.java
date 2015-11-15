@@ -49,7 +49,6 @@ public class UnusedPrivateFieldProcessor extends AbstractProcessor<CtField<?>> {
       rootPackage.getElements(new SameFieldAccessFilter(ctFieldReference)).forEach(ref -> {
         ref.getParent(CtStatement.class).replace(getFactory().Code()
           .createCodeSnippetStatement("// Remove unused private field " + ctField.getSimpleName()));
-        ;
       });
 
       ctField.getParent(CtClass.class).removeField(ctField);
