@@ -9,6 +9,7 @@ public class SwitchTooManyLinesSample {
     public boolean foo(int a, int b) {
         int random = new Random(System.currentTimeMillis()).nextInt(3);
         String str = "toto";
+        String toto;
         switch (random) {
             case 1 :
                 b += CONSTANT;
@@ -33,11 +34,11 @@ public class SwitchTooManyLinesSample {
                 }
             case 4 :
                 final char ch0 = str.charAt(0);
-                if ((((ch0 == 'y') || (ch0 == 'Y')) || (ch0 == 't')) || (ch0 == 'T')) {
-                    return Boolean.TRUE;
-                } 
                 if ((((ch0 == 'n') || (ch0 == 'N')) || (ch0 == 'f')) || (ch0 == 'F')) {
-                    return Boolean.FALSE;
+                    toto = "bar";
+                } 
+                if ((((ch0 == 'y') || (ch0 == 'Y')) || (ch0 == 't')) || (ch0 == 'T')) {
+                    toto = "foo";
                 } 
                 break;
         }
