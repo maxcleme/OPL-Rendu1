@@ -6,6 +6,7 @@
 \usepackage{listings}
 \usepackage{multirow}
 \usepackage[hidelinks]{hyperref}
+\usepackage{cleveref}
 
 \geometry{lmargin=2cm,rmargin=2cm,vmargin=2cm,hmargin=2cm}
 
@@ -45,12 +46,11 @@
 \\
 \par Sonar classe ces erreurs en 5 catégories : bloquantes, critiques, majeures, mineures et informatives. Parmi celles ci, notre attention s'est tout particulièrement portée sur les erreurs majeures. En effet, elles semblent être les plus rependues dans les projets, et peuvent pour certaines d'entre elles rendre un projet difficilement maintenable.
 \\
-\par Après cette première réduction du scope initial, nous avons fais le tri entre les alertes que nous pouvons corriger de façon automatique, et celles qui dépendent du contexte. Au terme de cette seconde analyse, nous avons dressé le tableau en annexe 1 qui reprend les différentes alertes ainsi que la solution apportée.
+\par Après cette première réduction du scope initial, nous avons fais le tri entre les alertes que nous pouvons corriger de façon automatique, et celles qui dépendent du contexte. 
 
-\subsubsection{Une approche plus pertinente}
-\par Suite à cette première approche du problème nous nous sommes rapidement heurté à un problème : comment tester nos résultats ? L'idée initiale était de sélectionner des projets open source, que nous récupérons sur github, afin que sonar puisse effectuer un premier diagnostic. Notre programme s'occupe ensuite de corriger les erreurs que nous avons ciblé, et un deuxième diagnostique permet de confirmer que le nombre d'alerte a effectivement baissé. 
+\par Suite à cette première approche du problème nous nous sommes rapidement heurté à un problème : comment tester nos résultats ? L'idée initiale était de sélectionner des projets open source, que nous récupérons sur GitHub, afin que sonar puisse effectuer un premier diagnostic. Notre programme s'occupe ensuite de corriger les erreurs que nous avons ciblé, et un deuxième diagnostic permet de confirmer que le nombre d'alerte a effectivement baissé. 
 \\
-\par Cependant, il est difficile de trouver des projets qui contiennent des erreurs bien spécifiques, d'autant plus que certaines d'entre elles relèvent de pratiques si mauvaises qu'il est très peu probable d'en croiser. Nous avons donc changé notre raisonnement en choisissant d'abord des projets que nous jugeons fiable, avec une communauté importante et une taille conséquente. Nous l'avons donné à analyser auprès de sonar, et nous avons choisis des alertes pertinentes parmi celles relevées.
+\par Cependant, il est difficile de trouver des projets qui contiennent des erreurs bien spécifiques, d'autant plus que certaines d'entre elles relèvent de pratiques si mauvaises qu'il est très peu probable d'en croiser. Nous avons donc changé notre raisonnement en choisissant d'abord des projets que nous jugeons fiable, avec une communauté importante et une taille conséquente. Nous l'avons donné à analyser auprès de sonar, et nous avons choisis des alertes pertinentes parmi celles relevées. Au terme de cette analyse, nous avons dressé le tableau en "\nameref{annexe1}" qui reprend les différentes alertes ainsi que la solution apportée.
 \\
 \par Cette seconde approche, basée sur les projets Apache Commons-Lang\footnote{\url{https://github.com/apache/commons-lang}} et Apache Commons-math\footnote{\url{https://github.com/apache/commons-math}}, nous a permis de dresser une nouvelle liste d'erreurs dont nous voulons automatiser la réparation.
 
@@ -65,7 +65,7 @@
 
 
 \section{Difficultés}
-\par Comme l'indique l'annexe 2, certaines de nos transformations ont provoqué une régression du code. Ces régressions peuvent s'expliquer de différentes manières.
+\par Comme l'indique "\nameref{annexe2}", certaines de nos transformations ont provoqué une régression du code. Ces régressions peuvent s'expliquer de différentes manières.
 
 \subsection{Spoon}
 \par Pour Apache Commons-math, Spoon produit des NullPointer\footnote{\url{http://docs.oracle.com/javase/8/docs/api/java/lang/NullPointerException.html}} lors de l'utilisation de Filter\footnote{\url{http://spoon.gforge.inria.fr/filter.html}} pour une raison encore inconnu.
@@ -94,21 +94,25 @@ En effet, lors d'un appel de méthode, Java crée une copie de l'objet afin de l
 \par
 Cependant, sûrement suite à un problème d'implémentation, cette solution produit de la régression lorsque des cases sont imbriqués dans l'AST (pas forcement directement).
 
+\section{Perspective}
+\par Afin de palier au problème important que constitue la régression de code, il serait intéressant d'envisager un outil graphique qui viendrait se positionner entre Sonar et le développeur. Ce dernier pourrait récupérer les rapports Sonar et ainsi ce passer de détection. Il serait également intéressant de pouvoir laisser le choix au développeur d'appliquer ou non une transformation, car ce dernier est sensé être au courant du comportement nominal du programme.
+
 \section{Conclusion}
 \par Notre but était de prouver qu'il est possible d'automatiser la résolution de certaines erreurs levées par sonar. Dans notre tâche, nous avons observé différentes limites telles que les règles qui dépendent d'un contexte particulier, ou les comportement qui vont volontairement à l'encontre des règles établies par Sonar.
 \par Nous sommes convaincu qu'un bon nombre d'alertes pourraient encore se corriger à l'aide de notre programme en écrivant de nouveaux processeurs.
-\par Afin de palier au problème important que constitue la régression de code, il serait intéressant d'envisager un outil graphique qui viendrait se positionner entre la détection et la correction, afin que l'utilisateur puisse valider le choix de correction.
+
 
 \section{References}
 \begin{enumerate}
 	\item  Renaud Pawlak, Martin Monperrus, Nicolas Petitprez, Carlos Noguera, Lionel Seinturier. “Spoon: A Library for Implementing Analyses and Transformations of Java Source Code”. http://spoon.gforge.inria.fr/
-	\item Lien github du projet : https://github.com/maxcleme/OPL-Rendu1
+	\item Lien github du projet : \url{https://github.com/maxcleme/OPL-Rendu1}
 \end{enumerate}	
 
 \newpage
 \appendix
 \begin{center}
 	\section{Annexe 1 - Tableaux des correctifs}
+	\label{annexe1}
 	\begin{tabular}{|p{0.45\textwidth}|p{0.45\textwidth}|}
   	\hline
 	  	\begin{center}
@@ -118,6 +122,9 @@ Cependant, sûrement suite à un problème d'implémentation, cette solution pro
 	  	 Compliant
 	  	 \end{center} \\
   	\hline
+  	\begin{center}
+  	squid:S1161 - @Override annotation should be used on any method overriding
+  	\end{center}
 	\begin{lstlisting}
 class Bar {
   public boolean doSomething(){...}
@@ -127,6 +134,9 @@ class Foo extends Bar {
 }
   	\end{lstlisting} 
    	& 
+   	\begin{center}
+  	squid:S1161 - @Override annotation should be used on any method overriding
+  	\end{center}
    	\begin{lstlisting}
 class Bar {
   public boolean doSomething(){...}
@@ -137,6 +147,9 @@ class Foo extends Bar {
 }
   	\end{lstlisting}  \\
   	\hline
+  	\begin{center}
+  	squid:S1151 - switch case clauses should not have too many lines
+  	\end{center}
 	\begin{lstlisting}
 switch (myVariable) {
   case 0: // 6 lines till next case
@@ -149,7 +162,10 @@ switch (myVariable) {
   ...
 }
   	\end{lstlisting} 
-   	& 
+   	&
+   	\begin{center}
+  	squid:S1151 - switch case clauses should not have too many lines
+  	\end{center} 
    	\begin{lstlisting}
 switch (myVariable) {
   case 0:                  
@@ -167,6 +183,9 @@ private void doSomething(){
 } 
   	\end{lstlisting}  \\
   	\hline
+  	\begin{center}
+  	squid:S1068 - Unused private fields should be removed
+  	\end{center} 
 	\begin{lstlisting}
 public class MyClass {
   private int foo = 42;
@@ -176,7 +195,10 @@ public class MyClass {
   }
 }
   	\end{lstlisting} 
-   	& 
+   	&
+   	\begin{center}
+  	squid:S1068 - Unused private fields should be removed
+  	\end{center}  
    	\begin{lstlisting}
 public class MyClass {
   public int compute(int a) {
@@ -185,12 +207,18 @@ public class MyClass {
 }
   	\end{lstlisting}  \\
   	\hline
+  	\begin{center}
+  	squid:S1132 - Strings literals should be placed on the left side when checking for equality
+  	\end{center} 
 	\begin{lstlisting}
 if ( "foo".equals(bar) ){
    ...
 }
   	\end{lstlisting} 
    	& 
+   	\begin{center}
+  	squid:S1132 - Strings literals should be placed on the left side when checking for equality
+  	\end{center} 
    	\begin{lstlisting}
 if ( bar.equals("foo") ){
    ...
@@ -206,16 +234,17 @@ if ( bar.equals("foo") ){
 	\begin{table}[]
 \centering
 \section{Annexe 2 - Évaluation}
+\label{annexe2}
 \begin{tabular}{c|c|c|c|c|c|}
 \cline{2-6}
-                                                    & Alerte ID           & Alertes & Alertes Fixés & \% Alertes Fixés & Test degradé \\ \hline
-\multicolumn{1}{|c|}{\multirow{5}{*}{Commons-lang}} & ID\_override        & 2       & 2             & 100\%            & 0            \\ \cline{2-6} 
-\multicolumn{1}{|c|}{}                              & ID\_switch          & 21      & 21            & 100\%            & 3            \\ \cline{2-6} 
-\multicolumn{1}{|c|}{}                              & ID\_private\_field  & 4       & 4             & 100\%            & 5            \\ \cline{2-6} 
-\multicolumn{1}{|c|}{}                              & ID\_equals          & 17      & 17            & 100\%            & 0            \\ \hline 
-\multicolumn{1}{|c|}{\multirow{3}{*}{Commons-math}} & ID\_override        & 9       & 9             & 100\%            & 0            \\ \cline{2-6} 
-\multicolumn{1}{|c|}{}                              & ID\_switch          & 61      & N/A           & N/A              & N/A          \\ \cline{2-6} 
-\multicolumn{1}{|c|}{}                              & ID\_equals          & 9       & 9             & 100\%            & 0            \\ \hline
+                                                    & Squid          & Alertes & Alertes Fixés & \% Alertes Fixés & Test degradé \\ \hline
+\multicolumn{1}{|c|}{\multirow{5}{*}{Commons-lang}} & squid:S1161         & 2       & 2             & 100\%            & 0            \\ \cline{2-6} 
+\multicolumn{1}{|c|}{}                              & squid:S1151         & 21      & 21            & 100\%            & 3            \\ \cline{2-6} 
+\multicolumn{1}{|c|}{}                              & squid:S1068         & 4       & 4             & 100\%            & 5            \\ \cline{2-6} 
+\multicolumn{1}{|c|}{}                              & squid:S1132         & 17      & 17            & 100\%            & 0            \\ \hline 
+\multicolumn{1}{|c|}{\multirow{3}{*}{Commons-math}} & squid:S1161         & 9       & 9             & 100\%            & 0            \\ \cline{2-6} 
+\multicolumn{1}{|c|}{}                              & squid:S1151         & 61      & N/A           & N/A              & N/A          \\ \cline{2-6} 
+\multicolumn{1}{|c|}{}                              & squid:S1132         & 9       & 9             & 100\%            & 0            \\ \hline
 \end{tabular}
 \end{table}
 	
