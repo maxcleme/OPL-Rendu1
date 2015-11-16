@@ -14,17 +14,41 @@
 
 
 \begin{document}
-\clearpage
-\vspace*{\fill}
-\begin{center}
-\begin{minipage}{.6\textwidth}
-\title{Sonar fixer}
-\author{Clement Maxime - Piorun Jordan}
-\date{\today}
-\maketitle
-\end{minipage}
 
-\end{center}
+\begin{titlepage}
+	
+	\newcommand{\HRule}{\rule{\linewidth}{0.5mm}} % Defines a new command for the horizontal lines, change thickness here
+	
+	\center % Center everything on the page
+	
+	%----------------------------------------------------------------------------------------
+	%	HEADING SECTIONS
+	%----------------------------------------------------------------------------------------
+	
+	\textsc{\LARGE Université Lille 1}\\[1.5cm] % Name of your university/college
+	\textsc{\Large Master 2 - IAGL}\\[0.5cm] % Major heading such as course name
+	\textsc{\large Résolution automatique d'erreurs Sonar}\\[0.5cm] % Minor heading such as course title
+	
+	\HRule \\[0.4cm]
+	{ \huge \bfseries Sonar fixer}\\[0.4cm] % Title of your document
+	\HRule \\[1.5cm]
+	
+	~
+	
+	% If you don't want a supervisor, uncomment the two lines below and remove the section above
+	\Large \emph{Auteurs:}\\
+	Maxime \textsc{Clement}\\ % Your name
+	Jordan \textsc{Piorun}\\[3cm]
+	%----------------------------------------------------------------------------------------
+	%	DATE SECTION
+	%----------------------------------------------------------------------------------------
+	
+	{\large \today}\\[3cm] % Date, change the \today to a set date if you want to be precise
+	
+	\vfill % Fill the rest of the page with whitespace
+	
+\end{titlepage}
+
 \vfill % equivalent to \vspace{\fill}
 \clearpage
 
@@ -33,24 +57,24 @@
 \newpage
 
 \section{Introduction}
-\par Pour de nombreux projets, nous avons recours a Sonar, un logiciel permettant de mesurer la qualité de notre code en continu. Sonar classe les améliorations a apporter en différentes catégories, des erreurs critiques aux simples informations.
+\par Pour de nombreux projets, nous avons recours a Sonar, un logiciel permettant de mesurer la qualité de notre code en continu. Sonar classe les améliorations à apporter en différentes catégories, des erreurs critiques aux simples informations.
 \\
-\par Pour notre projet, nous sommes parti d'un simple constat : les erreurs sonar sont souvent les mêmes, et un nombre considérable d'entres elles pourraient être corrigées de façon automatique. Cela passe par deux étapes : premièrement il faut repérer le morceau de code qui est à l'origine de l'erreur, puis il faut ensuite le remplacer avec du code équivalent.
+\par Pour notre projet, nous sommes partis d'un simple constat : les erreurs sonar sont souvent les mêmes, et un nombre considérable d'entres elles pourraient être corrigées de façon automatique. Cela passe par deux étapes : premièrement il faut repérer le morceau de code qui est à l'origine de l'erreur, puis il faut ensuite le remplacer par du code équivalent.
 \\
-\par Pour ces deux besoins, nous avons choisis d'utiliser Spoon, une librairie développée à l'Inria permettant d'analyser et de transformer du code Java.
+\par Pour ces deux besoins, nous avons choisi d'utiliser Spoon, une librairie développée à l'Inria permettant d'analyser et de transformer du code Java.
 
 \newpage
 \section{Analyse du code}
 \subsection{La méthodologie}
-\par Avant même de s'intéresser à la partie technique de ce projet, nous avons établis la liste des erreurs que nous voulions corriger.
+\par Avant même de s'intéresser à la partie technique de ce projet, nous avons établi la liste des erreurs que nous voulions corriger.
 \\
-\par Sonar classe ces erreurs en 5 catégories : bloquantes, critiques, majeures, mineures et informatives. Parmi celles ci, notre attention s'est tout particulièrement portée sur les erreurs majeures. En effet, elles semblent être les plus rependues dans les projets, et peuvent pour certaines d'entre elles rendre un projet difficilement maintenable.
+\par Sonar classe ces erreurs en 5 catégories : bloquantes, critiques, majeures, mineures et informatives. Parmi celles-ci, notre attention s'est tout particulièrement portée sur les erreurs majeures. En effet, elles semblent être les plus rependues dans les projets, et peuvent pour certaines d'entre elles rendre un projet difficilement maintenable.
 \\
 \par Après cette première réduction du scope initial, nous avons fais le tri entre les alertes que nous pouvons corriger de façon automatique, et celles qui dépendent du contexte. 
 
 \par Suite à cette première approche du problème nous nous sommes rapidement heurté à un problème : comment tester nos résultats ? L'idée initiale était de sélectionner des projets open source, que nous récupérons sur GitHub, afin que sonar puisse effectuer un premier diagnostic. Notre programme s'occupe ensuite de corriger les erreurs que nous avons ciblé, et un deuxième diagnostic permet de confirmer que le nombre d'alerte a effectivement baissé. 
 \\
-\par Cependant, il est difficile de trouver des projets qui contiennent des erreurs bien spécifiques, d'autant plus que certaines d'entre elles relèvent de pratiques si mauvaises qu'il est très peu probable d'en croiser. Nous avons donc changé notre raisonnement en choisissant d'abord des projets que nous jugeons fiable, avec une communauté importante et une taille conséquente. Nous l'avons donné à analyser auprès de sonar, et nous avons choisis des alertes pertinentes parmi celles relevées. Au terme de cette analyse, nous avons dressé le tableau en "\nameref{annexe1}" qui reprend les différentes alertes ainsi que la solution apportée.
+\par Cependant, il est difficile de trouver des projets qui contiennent des erreurs bien spécifiques, d'autant plus que certaines d'entre elles relèvent de pratiques si mauvaises qu'il est très peu probable d'en croiser. Nous avons donc changé notre raisonnement en choisissant d'abord des projets que nous jugeons fiable, avec une communauté importante et une taille conséquente. Nous l'avons donné à analyser auprès de sonar, et nous avons choisi des alertes pertinentes parmi celles relevées. Au terme de cette analyse, nous avons dressé le tableau en "\nameref{annexe1}" qui reprend les différentes alertes ainsi que la solution apportée.
 \\
 \par Cette seconde approche, basée sur les projets Apache Commons-Lang\footnote{\url{https://github.com/apache/commons-lang}} et Apache Commons-math\footnote{\url{https://github.com/apache/commons-math}}, nous a permis de dresser une nouvelle liste d'erreurs dont nous voulons automatiser la réparation.
 
@@ -61,8 +85,9 @@
 
 \section{Évaluation}
 \subsection{Projets réels}
-\par Comme décrit précedemment, nous avons choisis de valider nos résultats sur des projets de taille imposantes. Ces derniers ne sont pas simplement les clones des répertoires GitHub respectifs. Pour chacun des projets nous avons choisi comme point de départ le résultat renvoyé par Spoon sans appliquer une seule transformation de notre part. En effet, le comportement de Spoon est de créer l'AST\footnote{Abstract Synthax Tree} représentant le code source, d'appliquer les transformations spécifiées par le développeur, et pour finir de convertir l'AST en code source. Durant ce processus Spoon est susceptible de rajouter ou de perdre de l'information (ex : les parenthèses), c'est pourquoi nous avons choisis ce résultat comme point de départ.
-
+\par Comme décrit précédemment, nous avons choisis de valider nos résultats sur des projets de taille imposantes. Ces derniers ne sont pas simplement les clones des répertoires GitHub respectifs. Pour chacun des projets nous avons choisi comme point de départ le résultat renvoyé par Spoon sans appliquer une seule transformation de notre part. En effet, le comportement de Spoon est de créer l'AST\footnote{Abstract Synthax Tree} représentant le code source, d'appliquer les transformations spécifiées par le développeur, et pour finir de convertir l'AST en code source. Durant ce processus Spoon est susceptible de rajouter ou de perdre de l'information (ex : les parenthèses), c'est pourquoi nous avons choisi ce résultat comme point de départ.
+\subsection{Résulats}
+\par Nos résultats sur les deux projets sont présentés dans "\nameref{annexe2}". Le Squid représente la référence de l'erreur Sonar qui est testée, le nombre d'alerte est celui obtenu après recréation du code par spoon sans processeur, et la colonne test dégradé correspond au nombre de tests qui étaient fonctionnels avant notre intervention et qui ne le sont plus par la suite. Nous pouvons observer que pour les deux projets qui nous servent de référence, 100\% des alertes levées sont corrigées. Cependant, pour certaines données nous observons des régressions de tests, voire des résultats que nous n'avons pas pu traiter. Les différentes raisons de cet échec sont reprises par la suite dans la partie dédiée aux difficultés que nous avons rencontré.
 
 \section{Difficultés}
 \par Comme l'indique "\nameref{annexe2}", certaines de nos transformations ont provoqué une régression du code. Ces régressions peuvent s'expliquer de différentes manières.
@@ -71,13 +96,13 @@
 \par Pour Apache Commons-math, Spoon produit des NullPointer\footnote{\url{http://docs.oracle.com/javase/8/docs/api/java/lang/NullPointerException.html}} lors de l'utilisation de Filter\footnote{\url{http://spoon.gforge.inria.fr/filter.html}} pour une raison encore inconnu.
 
 \subsection{Cas particuliers}
-\par Il est arrivé que les comportements des tests aillent à l'encontre des règles de Sonar. Par exemple, pour Apache Commons-lang, nous avons voulu supprimer les attributs privés inutilisés d'une classe. Cependant 5 tests concernant la réflectivité consistaient à accéder à ces champs de manières dynamiques. Il nous est donc impossible de prévoir ce comportement.
+\par Il est arrivé que les comportements des tests aillent à l'encontre des règles de Sonar. Par exemple, pour Apache Commons-lang, nous avons voulu supprimer les attributs privés inutilisés d'une classe. Cependant, 5 tests concernant la réflectivité consistaient à accéder à ces champs de manières dynamiques. Il nous est donc impossible de prévoir ce comportement.
 
 \subsection{Passage par copie}
-\par Le but d'une des transformations est de réduire le nombre de lignes entre deux cases afin que ce nombre n'excède pas 5. Notre approche à été de créer des sous-méthodes regroupant le contenu du case afin de garder le comportement initial du programme. Pour que le code source reste cohérent et compilable, nous avons du récupérer tous le contexte avant l'exécution du case, et le passer en paramètre a notre sous-méthode. Cependant, même une fois cette étape réalisée, nous avons pu observer de forte régression du code source. Cela s'explique à cause d'une des spécificité de Java, le passage de copie\footnote{\url{https://docs.oracle.com/javase/tutorial/java/javaOO/arguments.html}}.
+\par Le but d'une des transformations est de réduire le nombre de lignes entre deux cases afin que ce nombre n'excède pas 5. Notre approche à été de créer des sous-méthodes regroupant le contenu du case afin de garder le comportement initial du programme. Pour que le code source reste cohérent et compilable, nous avons dû récupérer tout le contexte avant l'exécution du case, et le passer en paramètre a notre sous-méthode. Cependant, même une fois cette étape réalisée, nous avons pu observer de fortes régressions du code source. Cela s'explique à cause d'une des spécificités de Java, le passage de copie\footnote{\url{https://docs.oracle.com/javase/tutorial/java/javaOO/arguments.html}}.
 \\
 \par 
-En effet, lors d'un appel de méthode, Java crée une copie de l'objet afin de le passer en paramètre. Si à l'intérieur de la méthode, nous modifions la valeur d'un paramètre (=), alors il n'y a pas d'effet de bord dans le case initial et le comportement voulu n'est pas respecté. Cependant, si l'on modifie un attribut de l'objet passé en paramètre, alors l'effet de bord est possible. La solution à donc été la suivante :
+En effet, lors d'un appel de méthode, Java crée une copie de l'objet afin de le passer en paramètre. Si à l'intérieur de la méthode, nous modifions la valeur d'un paramètre (=), alors il n'y a pas d'effet de bord dans le case initial et le comportement voulu n'est pas respecté. Cependant, si l'on modifie un attribut de l'objet passé en paramètre, alors l'effet de bord est possible. La solution a donc été la suivante :
 
 \begin{enumerate}
 	\item Parmi les variables du contexte, déterminer celles qui seront modifier dans la méthode.
@@ -95,11 +120,11 @@ En effet, lors d'un appel de méthode, Java crée une copie de l'objet afin de l
 Cependant, sûrement suite à un problème d'implémentation, cette solution produit de la régression lorsque des cases sont imbriqués dans l'AST (pas forcement directement).
 
 \section{Perspective}
-\par Afin de palier au problème important que constitue la régression de code, il serait intéressant d'envisager un outil graphique qui viendrait se positionner entre Sonar et le développeur. Ce dernier pourrait récupérer les rapports Sonar et ainsi ce passer de détection. Il serait également intéressant de pouvoir laisser le choix au développeur d'appliquer ou non une transformation, car ce dernier est sensé être au courant du comportement nominal du programme.
+\par Afin de palier au problème important que constitue la régression de code, il serait intéressant d'envisager un outil graphique qui viendrait se positionner entre Sonar et le développeur. Ce dernier pourrait récupérer les rapports Sonar est ainsi ce passer de détection. Il serait également intéressant de pouvoir laisser le choix au développeur d'appliquer ou non une transformation, car ce dernier est censé être au courant du comportement nominal du programme.
 
 \section{Conclusion}
-\par Notre but était de prouver qu'il est possible d'automatiser la résolution de certaines erreurs levées par sonar. Dans notre tâche, nous avons observé différentes limites telles que les règles qui dépendent d'un contexte particulier, ou les comportement qui vont volontairement à l'encontre des règles établies par Sonar.
-\par Nous sommes convaincu qu'un bon nombre d'alertes pourraient encore se corriger à l'aide de notre programme en écrivant de nouveaux processeurs.
+\par Notre but était de prouver qu'il est possible d'automatiser la résolution de certaines erreurs levées par sonar. Dans notre tâche, nous avons observé différentes limites telles que les règles qui dépendent d'un contexte particulier, ou les comportements qui vont volontairement à l'encontre des règles établies par Sonar.
+\par Nous sommes convaincus qu'un bon nombre d'alertes pourraient encore se corriger à l'aide de notre programme en écrivant de nouveaux processeurs.
 
 
 \section{References}
